@@ -59,13 +59,13 @@ class _RejectedServiceRequestPageState
                   itemBuilder: (context, index) {
                     return SRcontainer("Rejected Service Request")
                         .makeContainer(
-                            service: data[index]["prodDet"],
-                            role: data[index]["serviceType"],
-                            address: data[index]["add"],
+                            service: rejectedSR[index]["productDetails"],
+                            role: rejectedSR[index]["serviceType"],
+                            address: rejectedSR[index]["address"],
                             sr: index + 1,
                             contex: context);
                   },
-                  itemCount: data.length,
+                  itemCount: rejectedSR.length,
                 ),
               )
             ],

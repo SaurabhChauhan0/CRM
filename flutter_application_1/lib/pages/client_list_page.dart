@@ -69,7 +69,7 @@ class ClientListPage extends StatelessWidget {
                               index + 1, context)
                           .makeContainer();
                     },
-                    itemCount: data.length,
+                    itemCount: totalSR.length,
                   ),
                 ),
               )

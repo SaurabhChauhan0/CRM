@@ -6,6 +6,9 @@ const bcrypt = require('bcrypt');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
+    id:{
+
+    },
     name: {
         type: String,
         required: true,
@@ -23,43 +26,64 @@ const userSchema = new Schema({
         ],
         unique: true,
     },
-    password: {
-        type: String,
-        required: [true, "password is required"],
-    },
-
-
-    // email: {
-    //     type: String,
-    //     lowercase: true,
-    //     required: true,
-    //     unique: true,
-
-    // },
-    // password: {
-    //     type: String,
-    //     required: true,
-    // },
-    phone: {
+    mobile: {
         type: Number,
         required: true,
         unique: true,
+    },
+    pass: {
+        type: String,
+        required: [true, "password is required"],
+    },
+     
+    status:{
+
+    },
+     
+    role: {
+        type: String,
+        required: true,
+
+    },
+
+    assigned:{
+
+    },
+
+    deviceToken:{
+
+    },
+
+    gender:{
+
+    },
+
+    experience:{
+
+    },
+
+    skills:{
+
+    },
+
+    city:{
+
     },
 
     address: {
         type: String,
         required: true,
     },
-    
-    role: {
-        type: String,
-        required: true,
+
+    zipCode:{
 
     },
-    id: {
-        type:String,
-        required:true,
+
+    approve:{
+
     }
+    
+    
 
 });
 
@@ -87,6 +111,6 @@ userSchema.methods.comparePassword = async function (userPassword) {
 
 
 
-const userModel = db.model('user', userSchema);
+const userModel = db.model('user_table', userSchema);
 
-module.exports = userModel;
+// module.exports = userModel;

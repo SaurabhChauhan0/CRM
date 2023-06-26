@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/new_service_request_details_page.dart';
 import 'package:flutter_application_1/pages/rejected_service_request_page.dart';
 import './container.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '/config.dart';
 import './getSR.dart';
+import './SRDetail_page.dart';
 
 class TotalServiceRequestPage extends StatefulWidget {
   @override
@@ -55,14 +57,46 @@ class _TotalServiceRequestPageState extends State<TotalServiceRequestPage> {
               Expanded(
                 child: ListView.builder(
                   itemBuilder: (context, index) {
-                    return SRcontainer("Total Service Request").makeContainer(
-                        service: data[index]["productDetails"],
-                        role: data[index]["serviceType"],
-                        address: data[index]["address"],
-                        sr: index + 1,
-                        contex: context);
+                    Color color = Color.fromARGB(255, 174, 199, 240);
+                    var status = "Completed";
+                    if (totalSR[index]["status"] == "pending") {
+                      color = Color.fromARGB(255, 179, 241, 211);
+                      status = "Pending";
+                    } else if (totalSR[index]["status"] == "rejected") {
+                      color = Color.fromARGB(255, 231, 176, 176);
+                      status = "Rejected";
+                    }
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ServiceRequestDetailsPage(
+                                    id: totalSR[index]['bookingId'],
+                                    name: totalSR[index]['name'],
+                                    address: totalSR[index]['address'],
+                                    createdDateTime: totalSR[index]
+                                        ["dateAndTime"],
+                                    serviceType: totalSR[index]['serviceType'],
+                                    phoneNumber: totalSR[index]
+                                        ['contactNumber'],
+                                    currentlyAllotted: totalSR[index]
+                                        ['allotted'],
+                                    amount: totalSR[index]['amount'],
+                                    status: totalSR[index]['status'],
+                                  )),
+                        );
+                      },
+                      child: SRcontainer(status).makeContainer(
+                          service: totalSR[index]["productDetails"],
+                          role: totalSR[index]["serviceType"],
+                          address: totalSR[index]["address"],
+                          sr: index + 1,
+                          contex: context,
+                          color: color),
+                    );
                   },
-                  itemCount: data.length,
+                  itemCount: totalSR.length,
                 ),
               )
             ],

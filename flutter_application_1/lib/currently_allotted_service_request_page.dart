@@ -2,61 +2,25 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '/config.dart';
-import './getSR.dart';
-import './SRDetail_page.dart';
+import 'pages/getSR.dart';
+import 'pages/SRDetail_page.dart';
 
-class PendingServiceRequestPage extends StatefulWidget {
+class CurrentlyAllottedServiceRequestPage extends StatefulWidget {
   @override
-  State<PendingServiceRequestPage> createState() =>
-      _PendingServiceRequestPageState();
+  State<CurrentlyAllottedServiceRequestPage> createState() =>
+      _CurrentlyAllottedServiceRequestPageState();
 }
 
-class _PendingServiceRequestPageState extends State<PendingServiceRequestPage> {
+class _CurrentlyAllottedServiceRequestPageState
+    extends State<CurrentlyAllottedServiceRequestPage> {
   // var data = [
-  //   {"service": "Ac Install", "role": "Electrician", "address": "Mayur Vihar"},
-  //   {
-  //     "service": "TV Install",
-  //     "role": "Mechaninc",
-  //     "address": "Preet Vihar",
-  //   },
-  //   {"service": "RO Install", "role": "Mechanic", "address": "Mawana"},
-  //   {"service": "RO Install", "role": "Mechanic", "address": "Mawana"},
-  //   {"service": "RO Install", "role": "Mechanic", "address": "Mawana"},
-  //   {"service": "RO Install", "role": "Mechanic", "address": "Mawana"},
-  //   {"service": "RO Install", "role": "Mechanic", "address": "Mawana"},
-  //   {"service": "RO Install", "role": "Mechanic", "address": "Mawana"},
-  //   {"service": "RO Install", "role": "Mechanic", "address": "Mawana"},
-  //   {"service": "RO Install", "role": "Mechanic", "address": "Mawana"},
-  //   {"service": "RO Install", "role": "Mechanic", "address": "Mawana"},
-  //   {"service": "RO Install", "role": "Mechanic", "address": "Mawana"}
-  // ]
-
-  // var respons;
-  // var data = List;
-  // // var userData = Map;
-  // List data = [];
-  // Future getStatus() async {
-  //   http.Response response = await http.get(Uri.parse(statusPending));
-
-  //   if (response.statusCode == 200) {
-  //     var data1 = json.decode(response.body);
-  //     data = data1;
-  //   }
-  // }
-
-  // @override
-  // void initState() {
-  //   getStatus();
-  //   super.initState();
-  // }
-
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
             elevation: 5,
             backgroundColor: Colors.white,
-            title: const Text("Pending Service Request",
+            title: const Text("Currently Allotted Service Request",
                 style: TextStyle(color: Colors.grey)),
             centerTitle: true,
             leading: IconButton(
@@ -86,35 +50,45 @@ class _PendingServiceRequestPageState extends State<PendingServiceRequestPage> {
 
               // SizedBox(height: 25),
               Expanded(
-                child: ListView.builder(
-                  itemCount: pendingSR.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SRDetailPage(
-                                    from: pendingSR[index]["name"],
-                                    dateAndTime: pendingSR[index]
-                                        ["dateAndTime"],
-                                    orderId: pendingSR[index]["bookingId"],
-                                    value: pendingSR[index]["amount"],
-                                    destination: pendingSR[index]["address"],
-                                    description: pendingSR[index]
-                                        ["serviceType"],
-                                  )),
-                        );
-                      },
-                      child: makeContainer(
-                          service: pendingSR[index]["productDetails"],
-                          role: pendingSR[index]["serviceType"],
-                          address: pendingSR[index]["address"],
-                          sr: index + 1,
-                          contex: context),
-                    );
-                  },
-                ),
+                child: currentlyAllottedSR.isEmpty
+                    ? CircularProgressIndicator() // Show a loading indicator while fetching data
+                    : ListView.builder(
+                        itemCount: currentlyAllottedSR.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SRDetailPage(
+                                          from: currentlyAllottedSR[index]
+                                              ["name"],
+                                          dateAndTime:
+                                              currentlyAllottedSR[index]
+                                                  ["dateAndTime"],
+                                          orderId: currentlyAllottedSR[index]
+                                              ["bookingId"],
+                                          value: currentlyAllottedSR[index]
+                                              ["amount"],
+                                          destination:
+                                              currentlyAllottedSR[index]
+                                                  ["address"],
+                                          description:
+                                              currentlyAllottedSR[index]
+                                                  ["serviceType"],
+                                        )),
+                              );
+                            },
+                            child: makeContainer(
+                                service: currentlyAllottedSR[index]
+                                    ["productDetails"],
+                                role: currentlyAllottedSR[index]["serviceType"],
+                                address: currentlyAllottedSR[index]["address"],
+                                sr: index + 1,
+                                contex: context),
+                          );
+                        },
+                      ),
               )
             ],
           )),

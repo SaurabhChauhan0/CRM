@@ -17,7 +17,7 @@ class CompleteServiceRequestPage extends StatelessWidget {
             elevation: 5,
             backgroundColor: Colors.white,
             title: Text(
-              "Complete Service Request",
+              "Completed Service Request",
               style: TextStyle(color: Colors.grey),
             ),
             centerTitle: true,
@@ -52,13 +52,13 @@ class CompleteServiceRequestPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return SRcontainer("Complete Service Request")
                         .makeContainer(
-                            service: data[index]["prodDet"],
-                            role: data[index]["serviceType"],
-                            address: data[index]["add"],
+                            service: completedSR[index]["productDetails"],
+                            role: completedSR[index]["serviceType"],
+                            address: completedSR[index]["address"],
                             sr: index + 1,
                             contex: context);
                   },
-                  itemCount: data.length,
+                  itemCount: completedSR.length,
                 ),
               )
             ],

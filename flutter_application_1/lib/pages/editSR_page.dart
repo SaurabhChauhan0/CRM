@@ -87,10 +87,10 @@ class _EditSRPageState extends State<EditSRPage> {
               child: Column(
                 children: [
                   makeInput(
-                      label: "Order ID",
+                      label: "Name",
                       details: bookIdController = widget.bookingID),
                   makeInput(
-                      label: "Booking Date Time",
+                      label: "Address",
                       details: bookDateController = widget.bookingDateTime),
                   Container(
                     margin: EdgeInsets.only(bottom: 15),
@@ -114,7 +114,7 @@ class _EditSRPageState extends State<EditSRPage> {
                     ),
                   ),
                   makeInput(
-                      label: "Address", details: addController = widget.add),
+                      label: "Allotted", details: addController = widget.add),
                   makeInput(
                       label: "Product Details",
                       details: prodDetController = widget.productDet),
@@ -149,12 +149,12 @@ class _EditSRPageState extends State<EditSRPage> {
                       minWidth: double.infinity,
                       height: 60,
                       onPressed: () {
-                        // registerSR();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SRDetailPage()),
-                        );
+                        registerSR();
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       // builder: (context) => SRDetailPage()),
+                        // );
                       },
                       color: Color.fromARGB(255, 15, 168, 115),
                       shape: RoundedRectangleBorder(

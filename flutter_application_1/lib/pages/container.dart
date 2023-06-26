@@ -5,14 +5,14 @@ class SRcontainer {
   SRcontainer(status) {
     this.status = status;
   }
-  Widget makeContainer({service, role, address, sr, contex}) {
+  Widget makeContainer({service, role, address, sr, contex, color}) {
     double screenWidth = MediaQuery.of(contex).size.width;
     double screenHeight = MediaQuery.of(contex).size.height;
 
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      color: Color.fromARGB(255, 224, 227, 254),
+      color: color,
       margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
       child: Container(
         padding: EdgeInsets.all(10),

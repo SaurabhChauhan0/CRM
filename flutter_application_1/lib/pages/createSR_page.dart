@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/editSR_page.dart';
+import 'package:flutter_application_1/pages/overview_page.dart';
+import '/config.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class CreateSRPage extends StatefulWidget {
   @override
@@ -8,7 +12,8 @@ class CreateSRPage extends StatefulWidget {
 
 class _CreateSRPageState extends State<CreateSRPage> {
   var serviceType;
-  var paymentMode;
+  var modeOfPayment;
+  var allotted;
 
   var it1 = [
     'Item 1',
@@ -24,18 +29,61 @@ class _CreateSRPageState extends State<CreateSRPage> {
     'Item 4',
     'Item 5',
   ];
+  var it3 = ["UPI", "Debit Card", "Net Banking"];
 
-  var bookingOrderId = TextEditingController();
-
-  var bookingDateTime = TextEditingController();
+  var name = TextEditingController();
 
   var address = TextEditingController();
 
+  // var allotted = TextEditingController();
+
   var productDetails = TextEditingController();
 
-  var contact = TextEditingController();
+  var contactNumber = TextEditingController();
 
   var amount = TextEditingController();
+  void registerSR() async {
+    var regBody = {
+      "name": name.text,
+      "address": address.text,
+      "serviceType": serviceType,
+      "allotted": allotted,
+      "productDetails": productDetails.text,
+      "contactNumber": contactNumber.text,
+      "amount": amount.text,
+      "modeOfPayment": modeOfPayment,
+    };
+    var response = await http.post(Uri.parse(createSR),
+        headers: {"Content-type": "application/json"},
+        body: jsonEncode(regBody));
+    if (response.statusCode == 200) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            // title: const Text('Error'),
+            content: Text(
+              'SR Registered Successfully !',
+              style: const TextStyle(
+                  color: Color.fromARGB(255, 60, 218, 25),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500),
+            ),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => OverviewPage()));
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +111,8 @@ class _CreateSRPageState extends State<CreateSRPage> {
               padding: const EdgeInsets.fromLTRB(12, 23, 12, 0),
               child: Column(
                 children: [
-                  makeInput(label: "Booking Order ID", details: bookingOrderId),
-                  makeInput(
-                      label: "Booking Date Time", details: bookingDateTime),
+                  makeInput(label: "Name", details: name),
+                  makeInput(label: "Address", details: address),
                   Container(
                     margin: EdgeInsets.only(bottom: 15),
                     child: DropdownButtonFormField<String>(
@@ -86,16 +133,11 @@ class _CreateSRPageState extends State<CreateSRPage> {
                       // value: currentItemSelected,
                     ),
                   ),
-                  makeInput(label: "Address", details: address),
-                  makeInput(label: "Product Details", details: productDetails),
-                  makeInput(label: "Contact Number", details: contact),
-                  makeInput(label: 'Amount', details: amount),
                   Container(
                     margin: EdgeInsets.only(bottom: 15),
                     child: DropdownButtonFormField<String>(
                       decoration: InputDecoration(
-                          labelText: "Mode of Payment",
-                          border: OutlineInputBorder()),
+                          labelText: "Allotted", border: OutlineInputBorder()),
                       items: it2.map((String dropDownStringItem) {
                         return DropdownMenuItem<String>(
                           value: dropDownStringItem,
@@ -104,7 +146,30 @@ class _CreateSRPageState extends State<CreateSRPage> {
                       }).toList(),
                       onChanged: (String? newValueSelected) {
                         setState(() {
-                          paymentMode = newValueSelected!;
+                          allotted = newValueSelected!;
+                        });
+                      },
+                      // value: currentItemSelected,
+                    ),
+                  ),
+                  makeInput(label: "Product Details", details: productDetails),
+                  makeInput(label: "Contact Number", details: contactNumber),
+                  makeInput(label: 'Amount', details: amount),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 15),
+                    child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                          labelText: "Mode of Payment",
+                          border: OutlineInputBorder()),
+                      items: it3.map((String dropDownStringItem) {
+                        return DropdownMenuItem<String>(
+                          value: dropDownStringItem,
+                          child: Text(dropDownStringItem),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValueSelected) {
+                        setState(() {
+                          modeOfPayment = newValueSelected!;
                         });
                       },
                       // value: currentItemSelected,
@@ -115,19 +180,21 @@ class _CreateSRPageState extends State<CreateSRPage> {
                       minWidth: double.infinity,
                       height: 60,
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EditSRPage(
-                                  bookingOrderId,
-                                  bookingDateTime,
-                                  serviceType,
-                                  address,
-                                  productDetails,
-                                  contact,
-                                  amount,
-                                  paymentMode)),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => EditSRPage(
+                        //           bookingOrderId,
+                        //           bookingDateTime,
+                        //           serviceType,
+                        //           address,
+                        //           productDetails,
+                        //           contact,
+                        //           amount,
+                        //           paymentMode)),
+                        // );
+
+                        registerSR();
                       },
                       color: Color.fromARGB(255, 11, 55, 132),
                       shape: RoundedRectangleBorder(
